@@ -16,14 +16,14 @@ env = gym.make(env_name)
 env = wrappers.Monitor(env, env_name, force=True)
 
 agent = Agent(env.observation_space.shape[0], env.action_space.n)
-
+agent.f
 for i_episodes in range(episodes):
     state = env.reset()
     state = np.reshape(state, [1, env.observation_space.shape[0]])
     index = 0
     done = False
     while not done:
-        env.render()
+        #env.render()
         action = agent.act(state)
         new_state, reward, done, info = env.step(action)
         new_state = np.reshape(new_state, [1, env.observation_space.shape[0]])
@@ -34,5 +34,6 @@ for i_episodes in range(episodes):
     if done:
         print("{} episode, score = {} ".format(i_episodes + 1, index + 1))
         agent.save_model()
-
+agent.f.close()
 env.close()
+gym.upload(env_name, api_key='sk_WRCITkqmTJKYB9hvBk5tPA')

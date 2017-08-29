@@ -18,17 +18,18 @@ class Agent:
         self.learning_rate = 0.001
         self.model = self._build_model()
         self.weight_backup = 'model_weights.h5'
+        self.f = open('csvfile.csv', 'w')
 
     def _build_model(self):
         model = Sequential()
-        model.add(Dense(20, input_dim=self.state_size, activation='elu'))
-        model.add(Dense(20, activation='elu'))
+        model.add(Dense(20, input_dim=self.state_size, activation='relu'))
+        model.add(Dense(20, activation='relu'))
         model.add(Dense(self.action_size, activation='linear'))
-        model.compile(loss='mse', optimizer=Nadam(lr=self.learning_rate))
+        model.compile(loss='mse', optimizer=Adam(lr=self.learning_rate))
         return model
 
     def save_model(self):
-            self.model.save(self.weight_backup)
+        self.model.save(self.weight_backup)
 
     def act(self, state):
         if np.random.rand() <= self.epsilon:
@@ -46,9 +47,12 @@ class Agent:
         for state, action, reward, new_state, done in Sample:
             target = reward
             if not done:
-                target = reward + self.gamma * np.amax(self.model.predict(new_state)[0])
+                target = reward + self.gamma * \
+                    np.amax(self.model.predict(new_state)[0])
             target_f = self.model.predict(state)
             target_f[0][action] = target
-            self.model.fit(state, target_f, epochs=1, verbose=0)
+            history = self.model.fit(state, target_f, epochs=1,
+                           verbose=0)
+        self.f.write('{}, {}\n'.format(history.history['loss'][0], target_f[0][action])) #Give your csv text here.
         if self.epsilon > self.epsilon_min:
             self.epsilon -= self.epsilon_decay
