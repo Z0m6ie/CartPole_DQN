@@ -26,6 +26,7 @@ class Agent:
         model.add(Dense(20, activation='relu'))
         model.add(Dense(self.action_size, activation='linear'))
         model.compile(loss='mse', optimizer=Adam(lr=self.learning_rate))
+        print(model.summary())
         return model
 
     def save_model(self):
