@@ -7,7 +7,7 @@ import numpy as np
 batch_size = 32
 episodes = sys.argv[1] if len(sys.argv) > 1 else 1500
 episodes = int(episodes)
-#env_name = sys.argv[2] if len(sys.argv) > 2 else "Pong-v0"
+# env_name = sys.argv[2] if len(sys.argv) > 2 else "Pong-v0"
 
 env_name = "CartPole-v0"
 
@@ -23,7 +23,7 @@ for i_episodes in range(episodes):
     index = 0
     done = False
     while not done:
-        #env.render()
+        # env.render()
         action = agent.act(state)
         new_state, reward, done, info = env.step(action)
         new_state = np.reshape(new_state, [1, env.observation_space.shape[0]])
